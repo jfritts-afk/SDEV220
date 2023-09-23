@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Database</title>
+    <script>
+        // Function to submit the form data as JSON
+        function addBook() {
+            const bookName = document.getElementById('book_name').value;
+            const author = document.getElementById('author').value;
+            const publisher = document.getElementById('publisher').value;
+
+            // Create a JSON object with the form data
+            const data = {
+                book_name: bookName,
+                author: author,
+                publisher: publisher
+            };
+
+            // Make an AJAX POST request to the /books endpoint
+            fetch('/books', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                // Handle the response (e.g., show a success message)
+                alert(result.message);
+                // Optionally, clear the form
+                document.getElementById('book_name').value = '';
+                document.getElementById('author').value = '';
+                document.getElementById('publisher').value = '';
+                // Refresh the book list
+                getBooks();
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error:', error);
+            });
+        }
+
+        // Function to retrieve and display the list of books
+        function getBooks() {
+            // Make an AJAX GET request to the /books endpoint
+            fetch('/books', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the list of books in the table
+                const tbody = document.getElementById('book_list');
+                tbody.innerHTML = '';
+
+                data.books.forEach(book => {
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${book.id}</td>
+                        <td>${book.book_name}</td>
+                        <td>${book.author}</td>
+                        <td>${book.publisher}</td>
+                        <td><button onclick="editBook(${book.id})">Edit</button></td>
+                        <td><button onclick="deleteBook(${book.id})">Delete</button></td>
+                    `;
+                });
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error:', error);
+            });
+        }
+
+        // Function to edit a book
+        function editBook(bookId) {
+            // Redirect to the edit page or open a modal for editing
+            // You can implement the edit functionality here
+            // For example, navigate to a separate edit page with the book ID
+            window.location.href = `/edit/${bookId}`;
+        }
+
+        // Function to delete a book
+        function deleteBook(bookId) {
+            // Make an AJAX DELETE request to the /books/<bookId> endpoint
+            fetch(`/books/${bookId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(result => {
+                // Handle the response (e.g., show a success message)
+                alert(result.message);
+                // Refresh the book list
+                getBooks();
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error:', error);
+            });
+        }
+
+        // Initial load of the book list
+        getBooks();
+    </script>
+</head>
+<body>
+    <h1>Welcome to the Book Database</h1>
+    <form>
+        <label for="book_name">Book Name:</label>
+        <input type="text" id="book_name" required><br>
+
+        <label for="author">Author:</label>
+        <input type="text" id="author" required><br>
+
+        <label for="publisher">Publisher:</label>
+        <input type="text" id="publisher" required><br>
+
+        <input type="button" value="Add Book" onclick="addBook()">
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>Publisher</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="book_list">
+            <!-- Book list will be populated here -->
+        </tbody>
+    </table>
+</body>
+</html>
+
+<!-- jfritts-afk 09/15/2023 -->
+<!--#    d8b  .d888         d8b 888    888                              .d888 888      
+    #    Y8P d88P"          Y8P 888    888                             d88P"  888      
+    #        888                888    888                             888    888      
+    #   8888 888888 888d888 888 888888 888888 .d8888b          8888b.  888888 888  888 
+    #   "888 888    888P"   888 888    888    88K                 "88b 888    888 .88P 
+    #    888 888    888     888 888    888    "Y8888b. 888888 .d888888 888    888888K  
+    #    888 888    888     888 Y88b.  Y88b.       X88        888  888 888    888 "88b 
+    #    888 888    888     888  "Y888  "Y888  88888P'        "Y888888 888    888  888 
+    #    888                                                                           
+    #   d88P                                                                           
+    # 888P"    

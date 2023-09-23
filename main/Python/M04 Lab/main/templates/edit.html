@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Book</title>
+</head>
+<body>
+    <h1>Edit Book</h1>
+    <form action="/edit/{{ book.id }}" method="POST">
+        <label for="new_book_name">New Book Name:</label>
+        <input type="text" id="new_book_name" name="new_book_name" value="{{ book.book_name }}" required><br>
+
+        <label for="new_author">New Author:</label>
+        <input type="text" id="new_author" name="new_author" value="{{ book.author }}" required><br>
+
+        <label for="new_publisher">New Publisher:</label>
+        <input type="text" id="new_publisher" name="new_publisher" value="{{ book.publisher }}" required><br>
+
+        <input type="submit" value="Save Changes">
+    </form>
+    <a href="/">Back to Book List</a>
+</body>
+</html>
+
+<!-- jfritts-afk 09/15/2023 -->
+<!--#    d8b  .d888         d8b 888    888                              .d888 888      
+    #    Y8P d88P"          Y8P 888    888                             d88P"  888      
+    #        888                888    888                             888    888      
+    #   8888 888888 888d888 888 888888 888888 .d8888b          8888b.  888888 888  888 
+    #   "888 888    888P"   888 888    888    88K                 "88b 888    888 .88P 
+    #    888 888    888     888 888    888    "Y8888b. 888888 .d888888 888    888888K  
+    #    888 888    888     888 Y88b.  Y88b.       X88        888  888 888    888 "88b 
+    #    888 888    888     888  "Y888  "Y888  88888P'        "Y888888 888    888  888 
+    #    888                                                                           
+    #   d88P                                                                           
+    # 888P"    
